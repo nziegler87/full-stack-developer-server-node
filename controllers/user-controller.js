@@ -1,15 +1,24 @@
-import users from './users/users.js';
+import people from './users/users.js';
+let users = people;
 
 const userController = (app) => {
     app.get('/api/users', findAllUsers);
     app.get('/api/users/:uid', findUserById);
     app.post('/api/users', createUser);
     app.delete('/api/users/:uid', deleteUser);
+    app.put('/api/users/:uid', updateUser);
 }
 
 const deleteUser = (req, res) => {
     const userId = req.params['uid'];
-    const new_users = users.filter( usr => usr._id !== userId );
+    users = users.filter( usr => usr._id !== userId );
+    res.sendStatus(200);
+}
+
+const updateUser = (req, res) => {
+    const userId = req.params['uid'];
+    const updatedUser = req.body;
+    users = users.map(usr => usr._id === userId ? updatedUser: usr);
     res.sendStatus(200);
 }
 
